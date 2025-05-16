@@ -10,7 +10,7 @@ public class InvoicePdfRedirectController {
             try {
                 InvoicePdfService.sendPdfToAwsS3(invoiceId);
             } catch (Exception ex) {
-                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'PDF generation failed.'));
+                ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage()));
                 return null;
             }
         }
