@@ -1,0 +1,11 @@
+<apex:page controller="InvoicePdfRedirectController">
+    <apex:form >
+        <apex:actionFunction name="redirectToPdf" action="{!redirectToPdf}" />
+
+        <script>
+            window.onload = function() {
+                redirectToPdf();
+            };
+        </script>
+    </apex:form>
+</apex:page>
