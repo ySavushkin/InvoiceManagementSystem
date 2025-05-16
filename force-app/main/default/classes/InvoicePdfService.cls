@@ -7,7 +7,7 @@ public class InvoicePdfService {
         PageReference pdfPage = Page.Invoice_PDF;
         pdfPage.getParameters().put('id', invoiceId);
 
-        Blob pdfBlob = pdfPage.getContent();
+        Blob pdfBlob = Test.isRunningTest() ? Blob.valueOf('UNIT.TEST') : pdfPage.getContent();
         
 		HttpRequest request = new HttpRequest();
 		request.setMethod('PUT');

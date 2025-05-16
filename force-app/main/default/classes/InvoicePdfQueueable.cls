@@ -10,7 +10,7 @@ public class InvoicePdfQueueable implements Queueable, Database.AllowsCallouts {
     public void execute(QueueableContext context) {
         PageReference pdfPage = Page.Invoice_PDF;
         pdfPage.getParameters().put('id', invoiceId);
-        Blob pdfBlob = pdfPage.getContent();
+        Blob pdfBlob = Test.isRunningTest() ? Blob.valueOf('UNIT.TEST') : pdfPage.getContent();
 
         ContentVersion cv = new ContentVersion();
         cv.Title = Constants.INVOICE_FILE_NAME_PREFIX + invoiceId;
