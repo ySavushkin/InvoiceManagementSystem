@@ -2,7 +2,7 @@
 private class InvoiceTriggerTest {
     @testSetup 
     static void setup() {
-        InvoiceDataFactory.generateInvoiceTestData();
+        TestDataFactory.createInvoiceLineItem(true);
     }
 
     @isTest 
@@ -21,8 +21,8 @@ private class InvoiceTriggerTest {
         List<ContentDocumentLink> invoiceAttachments = retrieveRecordAttachments(testInvoice.Id);
         List<ContentDocumentLink> accountAttachments = retrieveRecordAttachments(testAccount.Id);
 
-        Assert.areEqual(1, invoiceAttachments.size());
-        Assert.areEqual(1, accountAttachments.size());
+        Assert.areEqual(1, invoiceAttachments.size(), 'Invoice should have one attachment');
+        Assert.areEqual(1, accountAttachments.size(), 'Account should have one attachment');
     }
 
     static List<ContentDocumentLink> retrieveRecordAttachments(Id recordId) {

@@ -1,3 +1,5 @@
 trigger InvoiceTrigger on Invoice__c (after update) {
-    InvoiceTriggerHelper.handleStatusChange(Trigger.newMap, Trigger.oldMap);
+    if(Trigger.isUpdate && Trigger.isAfter) { 
+        InvoiceTriggerHelper.onAfterUpdate(Trigger.newMap, Trigger.oldMap);
+    }
 }

@@ -2,7 +2,7 @@
 public with sharing class InvoicePdfServiceTest {
     @testSetup
     static void setup(){
-        InvoiceDataFactory.generateInvoiceTestData();
+        TestDataFactory.createInvoiceLineItem(true);
     }
 
     @isTest
@@ -17,7 +17,7 @@ public with sharing class InvoicePdfServiceTest {
         Test.stopTest();
         
         Invoice__c updated = [SELECT Status__c FROM Invoice__c WHERE Id = :testInvoice.Id];
-        Assert.areEqual(Constants.STATUS_SENT, updated.Status__c);
+        Assert.areEqual(Constants.STATUS_SENT, updated.Status__c, 'Status should be changed to Sent');
     }
 
     @isTest
@@ -30,7 +30,7 @@ public with sharing class InvoicePdfServiceTest {
         try{
             InvoicePdfService.sendPdfToAwsS3(testInvoice.Id);
         } catch(Exception ex){
-            Assert.areEqual(Constants.S3_ERROR_MESSAGE, ex.getMessage());
+            Assert.areEqual(Constants.S3_ERROR_MESSAGE, ex.getMessage(), 'Error message should be thrown');
         }
 
         Test.stopTest();

@@ -12,13 +12,13 @@ public class InvoicePdfQueueable implements Queueable, Database.AllowsCallouts {
         pdfPage.getParameters().put('id', invoiceId);
         Blob pdfBlob = Test.isRunningTest() ? Blob.valueOf('UNIT.TEST') : pdfPage.getContent();
 
-        ContentVersion cv = new ContentVersion();
-        cv.Title = Constants.INVOICE_FILE_NAME_PREFIX + invoiceId;
-        cv.PathOnClient = Constants.INVOICE_FILE_NAME_PREFIX + invoiceId + Constants.FILE_EXTENSION_PDF;
-        cv.VersionData = pdfBlob;
-        insert cv;
+        ContentVersion contentVersion = new ContentVersion();
+        contentVersion.Title = Constants.INVOICE_FILE_NAME_PREFIX + invoiceId;
+        contentVersion.PathOnClient = Constants.INVOICE_FILE_NAME_PREFIX + invoiceId + Constants.FILE_EXTENSION_PDF;
+        contentVersion.VersionData = pdfBlob;
+        insert contentVersion;
 
-        Id contentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id LIMIT 1].ContentDocumentId;
+        Id contentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :contentVersion.Id LIMIT 1].ContentDocumentId;
 
         ContentDocumentLink link = new ContentDocumentLink();
         link.ContentDocumentId = contentDocumentId;

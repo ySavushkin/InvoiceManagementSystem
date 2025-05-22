@@ -8,20 +8,27 @@ public class InvoicePdfService {
         pdfPage.getParameters().put('id', invoiceId);
 
         Blob pdfBlob = Test.isRunningTest() ? Blob.valueOf('UNIT.TEST') : pdfPage.getContent();
-        
-		HttpRequest request = new HttpRequest();
-		request.setMethod('PUT');
-		request.setBodyAsBlob(pdfBlob);
-        request.setHeader('Content-Type', Constants.CONTENT_TYPE_PDF);
-		request.setEndpoint(Constants.S3_ENDPOINT + fileNameToCreate);
 
 		Http http = new Http();
-		HttpResponse res = http.send(request);
+		HttpResponse res = http.send(Utils.request(
+			Constants.S3_ENDPOINT + fileNameToCreate,
+			'PUT',
+			pdfBlob,
+			new Map<String, String>{
+    			'Content-Type' => Constants.CONTENT_TYPE_PDF
+			}
+		));
         
         if (res.getStatusCode() != 200 && res.getStatusCode() != 201) {
 			throw new IntegrationException(Constants.S3_ERROR_MESSAGE);
         } else {
-			Invoice__c invoice = [SELECT Id, Name, Status__c, Account__c FROM Invoice__c WHERE Id = :invoiceId];
+			Invoice__c invoice = [
+				SELECT Id
+				, Status__c 
+				FROM Invoice__c 
+				WHERE Id = :invoiceId 
+				LIMIT 1
+			];
 
 			invoice.Status__c = Constants.STATUS_SENT;
 			update invoice;
