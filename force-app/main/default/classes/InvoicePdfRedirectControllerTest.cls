@@ -50,8 +50,12 @@ public with sharing class InvoicePdfRedirectControllerTest {
         Test.setCurrentPage(Page.InvoiceRedirect);
         ApexPages.currentPage().getParameters().put('id', testInvoice.Id);
 
+        Test.startTest();
+
         InvoicePdfRedirectController controller = new InvoicePdfRedirectController();
         PageReference result = controller.redirectToPdf();
+
+        Test.stopTest();
 
         Assert.areEqual(null, result, 'PageReference should be null. AWS Error');
     }

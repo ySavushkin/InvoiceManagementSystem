@@ -16,8 +16,8 @@ public with sharing class InvoicePdfServiceTest {
 
         Test.stopTest();
         
-        Invoice__c updated = [SELECT Status__c FROM Invoice__c WHERE Id = :testInvoice.Id];
-        Assert.areEqual(Constants.STATUS_SENT, updated.Status__c, 'Status should be changed to Sent');
+        Invoice__c testInvoiceAfterUpdate = [SELECT Status__c FROM Invoice__c WHERE Id = :testInvoice.Id];
+        Assert.areEqual(Constants.STATUS_SENT, testInvoiceAfterUpdate.Status__c, 'Status should be changed to Sent');
     }
 
     @isTest

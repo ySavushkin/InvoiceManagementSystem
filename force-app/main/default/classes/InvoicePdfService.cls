@@ -10,14 +10,14 @@ public class InvoicePdfService {
         Blob pdfBlob = Test.isRunningTest() ? Blob.valueOf('UNIT.TEST') : pdfPage.getContent();
 
 		Http http = new Http();
-		HttpResponse res = http.send(Utils.request(
+		HttpResponse res = HttpUtils.request(
 			Constants.S3_ENDPOINT + fileNameToCreate,
 			'PUT',
 			pdfBlob,
 			new Map<String, String>{
     			'Content-Type' => Constants.CONTENT_TYPE_PDF
 			}
-		));
+		);
         
         if (res.getStatusCode() != 200 && res.getStatusCode() != 201) {
 			throw new IntegrationException(Constants.S3_ERROR_MESSAGE);
