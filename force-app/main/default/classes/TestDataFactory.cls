@@ -45,4 +45,25 @@ public with sharing class TestDataFactory {
         }
         return invoiceLineItem;
     }
+
+    public static InvoiceRequestModel.InvoiceUploadRequest createInvoice () {
+        InvoiceRequestModel.InvoiceUploadRequest request = new InvoiceRequestModel.InvoiceUploadRequest();
+        request.uploadId = 'testID1';
+
+        InvoiceRequestModel.InvoiceModel invoice = new InvoiceRequestModel.InvoiceModel();
+        invoice.name = 'testInvoice';
+        invoice.account = [SELECT Id FROM Account LIMIT 1].Id;
+        invoice.dueDate = Date.newInstance(2025, 6, 22);
+        invoice.invoiceDate = Date.newInstance(2025, 6, 22);
+
+        InvoiceRequestModel.InvoiceLineItemModel item1 = new InvoiceRequestModel.InvoiceLineItemModel();
+        item1.productName = 'testProduct';
+        item1.quantity = 5;
+        item1.unitPrice = 222;
+
+        invoice.invoiceLineItems = new List<InvoiceRequestModel.InvoiceLineItemModel>{item1};
+        request.invoices = new List<InvoiceRequestModel.InvoiceModel>{invoice};
+
+        return request;
+    }
 }

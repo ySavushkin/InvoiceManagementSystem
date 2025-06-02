@@ -1,6 +1,23 @@
 public class InvoiceRequestModel {
-    public List<InvoiceModel> invoices;
-    public String uploadId;
+    public static IParsable parseUploadRequest(String jsonString, Type t) {
+        try {
+            return (IParsable) JSON.deserialize(jsonString, t);
+        } catch (JSONException je) {
+            throw new InvoiceModelsException(Constants.JSON_PARSE_ERROR + je.getMessage());
+        }
+    }
+    
+    public interface IParsable {}
+
+    public class InvoiceUploadResponse {
+        public Boolean isSuccess;
+        public String errorMessage;
+    }
+
+    public class InvoiceUploadRequest implements IParsable{
+        public List<InvoiceModel> invoices;
+        public String uploadId;
+    }    
 
     public class InvoiceModel {
         public String name;
@@ -15,4 +32,6 @@ public class InvoiceRequestModel {
         public Integer quantity;
         public Decimal unitPrice;
     }
+
+    public class InvoiceModelsException extends Exception {}
 }

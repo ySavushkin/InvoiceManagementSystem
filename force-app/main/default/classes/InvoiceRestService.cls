@@ -1,14 +1,20 @@
 @RestResource(urlMapping='/Invoice')
 global with sharing class InvoiceRestService {
+    public static Integer lastStatusCode;
+
 	@HttpPost 
 	global static void doPost() {
-		String jsonBody = RestContext.request.requestBody.toString();
+        String jsonBody = RestContext.request.requestBody.toString();
 
-        try {
+		try {
             InvoiceProcessingService.process(jsonBody);
+            RestContext.response.statusCode = 200;
+            lastStatusCode = 200;
         } catch (Exception e) {
-            RestContext.response.statusCode = 500;
-            RestContext.response.responseBody = Blob.valueOf('Internal Server Error: ' + e.getMessage());
+            ExceptionHandler.ResponseWrapper response = ExceptionHandler.handle(e);
+            RestContext.response.statusCode = response.statusCode;
+            lastStatusCode = response.statusCode;
+            RestContext.response.responseBody = Blob.valueOf(response.responseBody);
         }
 	}
 }
